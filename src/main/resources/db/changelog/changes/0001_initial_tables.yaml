@@ -4,51 +4,6 @@ databaseChangeLog:
       author: Maksym Odnokozov
       changes:
         - createTable:
-            tableName: input_form
-            columns:
-              - column:
-                  name: id
-                  type: BIGINT
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: type
-                  type: VARCHAR(10)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: message
-                  type: VARCHAR(255)
-        - createTable:
-            tableName: placeholder
-            columns:
-              - column:
-                  name: id
-                  type: BIGINT
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: name
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: value
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: input_form_id
-                  type: BIGINT
-                  constraints:
-                    nullable: true
-                    foreignKeyName: fk_placeholder_input_form
-                    references: input_form(id)
-        - createTable:
             tableName: template
             columns:
               - column:
@@ -69,19 +24,64 @@ databaseChangeLog:
                   constraints:
                     nullable: false
         - createTable:
-            tableName: template_placeholder
+            tableName: input_form
             columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: message
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: input_form_default_values
+            columns:
+              - column:
+                  name: input_form_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_input_form_default_values
+                    references: input_form(id)
+              - column:
+                  name: value
+                  type: VARCHAR(255)
+        - createTable:
+            tableName: placeholder
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: input_form_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_placeholder_input_form
+                    references: input_form(id)
               - column:
                   name: template_id
                   type: BIGINT
                   constraints:
-                    primaryKey: true
-                    nullable: false
-                    foreignKeyName: fk_template_placeholder
+                    nullable: true
+                    foreignKeyName: fk_placeholder_template
                     references: template(id)
-              - column:
-                  name: placeholder
-                  type: VARCHAR(255)
-                  constraints:
-                    primaryKey: true
-                    nullable: false

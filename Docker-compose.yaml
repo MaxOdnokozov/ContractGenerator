@@ -8,6 +8,8 @@ services:
       - postgres
     ports:
       - "8080:8080"
+    volumes:
+      - templates:/app/templates
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB_NAME}
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
@@ -25,3 +27,4 @@ services:
 
 volumes:
   pgdata:
+  templates:
