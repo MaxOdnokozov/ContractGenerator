@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.maksym.odnokozov</groupId>
-	<artifactId>contact-generato</artifactId>
+	<artifactId>contract-generator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>contact-generator</name>
 	<description>Contract Generation Project aimed to generate student&apos;s contracts for different educational institution like university or institute</description>
@@ -84,6 +84,11 @@
 			<groupId>org.testcontainers</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>8.0.1.Final</version>
 		</dependency>
 	</dependencies>
 

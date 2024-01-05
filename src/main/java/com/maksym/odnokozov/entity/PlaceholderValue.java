@@ -8,12 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import java.util.List;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,26 +23,19 @@ import org.hibernate.Hibernate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "placeholder")
-public class Placeholder {
+@Table(name = "placeholder_value")
+public class PlaceholderValue {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "placeholder_sequence")
-  @SequenceGenerator(name = "placeholder_sequence", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "placeholder_value_sequence")
+  @SequenceGenerator(name = "placeholder_value_sequence", allocationSize = 1)
   private Long id;
 
-  @NotBlank
-  @Size(min = 1, max = 128)
-  private String name;
+  @NotBlank private String value;
 
-  @Size(min = 1, max = 128)
-  private String description;
+  private Integer sequenceNumber;
 
-  @ManyToOne private Template template;
-
-  @Builder.Default private PlaceholderType type = PlaceholderType.TEXT;
-
-  @OneToMany private List<PlaceholderValue> predefinedValues;
+  @ManyToOne private Placeholder placeHolder;
 
   @Override
   public boolean equals(Object o) {
@@ -55,8 +45,8 @@ public class Placeholder {
     if (isNull(o) || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    Placeholder placeholder = (Placeholder) o;
-    return nonNull(getId()) && Objects.equals(getId(), placeholder.getId());
+    PlaceholderValue placeholderValue = (PlaceholderValue) o;
+    return nonNull(getId()) && Objects.equals(getId(), placeholderValue.getId());
   }
 
   @Override

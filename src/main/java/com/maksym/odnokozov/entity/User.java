@@ -7,11 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
@@ -26,26 +25,29 @@ import org.hibernate.Hibernate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "placeholder")
-public class Placeholder {
+@Table(name = "app_user")
+public class User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "placeholder_sequence")
-  @SequenceGenerator(name = "placeholder_sequence", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_sequence")
+  @SequenceGenerator(name = "app_user_sequence", allocationSize = 1)
   private Long id;
 
-  @NotBlank
-  @Size(min = 1, max = 128)
-  private String name;
+  @NotNull
+  @Size(min = 1, max = 256)
+  private String email;
 
-  @Size(min = 1, max = 128)
-  private String description;
+  @NotNull
+  @Size(min = 8, max = 128)
+  private String password;
 
-  @ManyToOne private Template template;
+  private Role role;
 
-  @Builder.Default private PlaceholderType type = PlaceholderType.TEXT;
+  @OneToMany
+  private List<Organization> organizations;
 
-  @OneToMany private List<PlaceholderValue> predefinedValues;
+  @OneToMany
+  private List<Template> templates;
 
   @Override
   public boolean equals(Object o) {
@@ -55,8 +57,8 @@ public class Placeholder {
     if (isNull(o) || Hibernate.getClass(this) != Hibernate.getClass(o)) {
       return false;
     }
-    Placeholder placeholder = (Placeholder) o;
-    return nonNull(getId()) && Objects.equals(getId(), placeholder.getId());
+    User user = (User) o;
+    return nonNull(getId()) && Objects.equals(getId(), user.getId());
   }
 
   @Override
