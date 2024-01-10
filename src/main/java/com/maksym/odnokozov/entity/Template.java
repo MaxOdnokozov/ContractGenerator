@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
@@ -45,11 +46,14 @@ public class Template {
 
   private Language language;
 
-  @OneToMany private List<Placeholder> placeholders;
+  @OneToMany(mappedBy = "template")
+  private List<Placeholder> placeholders;
 
   @ManyToOne private User owner;
 
-  @ManyToOne private Organization organization;
+  @ManyToOne
+  @JoinColumn(name = "organization_id")
+  private Organization organization;
 
   @Override
   public boolean equals(Object o) {

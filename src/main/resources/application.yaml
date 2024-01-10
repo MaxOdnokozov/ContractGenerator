@@ -13,5 +13,13 @@ spring:
     hibernate:
       ddl-auto: none
 
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yaml
+app:
+  root-email: ${ROOT_EMAIL}
+  root-password-hash: ${ROOT_PASSWORD_HASH}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    com.maksym.odnokozov: TRACE

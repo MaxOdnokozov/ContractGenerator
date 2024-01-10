@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
@@ -41,7 +42,9 @@ public class Placeholder {
   @Size(min = 1, max = 128)
   private String description;
 
-  @ManyToOne private Template template;
+  @ManyToOne
+  @JoinColumn(name = "template_id")
+  private Template template;
 
   @Builder.Default private PlaceholderType type = PlaceholderType.TEXT;
 

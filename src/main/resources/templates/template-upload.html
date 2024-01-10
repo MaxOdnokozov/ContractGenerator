@@ -9,25 +9,8 @@
 </head>
 <body>
 <div class="container">
-    <div class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" th:text="#{welcome}" href="#"></a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown">
-                        <span th:text="#{language}"></span>
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" th:href="@{?lang=en}" th:text="#{english}"></a>
-                        <a class="dropdown-item" th:href="@{?lang=uk}" th:text="#{ukrainian}"></a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal" th:text="#{login}"></a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <div th:insert="~{fragments/navbar :: navbar}"></div>
+
     <div class="jumbotron">
         <h1 class="display-4" th:text="#{welcome}"></h1>
         <form method="POST" th:action="@{/template/upload}" enctype="multipart/form-data">
@@ -40,33 +23,12 @@
     </div>
 </div>
 
-<!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" th:text="#{login}"></h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="loginForm" method="post">
-                    <div class="form-group">
-                        <label for="username" th:text="#{username}"></label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password" th:text="#{password}"></label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary" th:text="#{submit}"></button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
+<script>
+    function logout(event) {
+        event.preventDefault();
+        document.getElementById('logoutForm').submit();
+    }
+</script>
 <!-- jQuery CDN -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <!-- Popper.js CDN -->

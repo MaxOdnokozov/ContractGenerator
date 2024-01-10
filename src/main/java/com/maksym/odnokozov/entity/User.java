@@ -4,9 +4,14 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -41,12 +46,14 @@ public class User {
   @Size(min = 8, max = 128)
   private String password;
 
+  @Enumerated(EnumType.STRING)
   private Role role;
 
-  @OneToMany
-  private List<Organization> organizations;
+  @ManyToOne
+  @JoinColumn(name = "organization_id")
+  private Organization organization;
 
-  @OneToMany
+  @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
   private List<Template> templates;
 
   @Override

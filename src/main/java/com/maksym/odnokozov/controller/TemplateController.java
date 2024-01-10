@@ -1,5 +1,6 @@
 package com.maksym.odnokozov.controller;
 
+import com.maksym.odnokozov.entity.Template;
 import com.maksym.odnokozov.service.TemplateService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/template")
@@ -25,12 +27,15 @@ public class TemplateController {
     }
 
     @PostMapping("/upload")
-    public String uploadTemplate(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) {
+    public String uploadTemplate(@RequestParam("file") MultipartFile file,
+                                 Principal principal,
+                                 RedirectAttributes attributes) {
         try {
-            templateService.saveTemplate(file);
-            attributes.addFlashAttribute("message", "Template uploaded successfully");
+            Template savedTemplate = templateService.saveTemplate(file, principal);
+            attributes.addFlashAttribute("message", "Template uploaded successfully: " + savedTemplate.getName());
         } catch (IOException e) {
-            attributes.addFlashAttribute("message", "Failed to upload template");
+            e.printStackTrace(); // Log the exception, for real applications, use a logger
+            attributes.addFlashAttribute("message", "Failed to upload template due to an error: " + e.getMessage());
         }
         return "redirect:/welcome";
     }

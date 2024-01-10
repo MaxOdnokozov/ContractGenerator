@@ -4,6 +4,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,7 +41,11 @@ public class Organization {
   @Size(min = 1, max = 256)
   private String description;
 
-  @OneToMany private List<Template> templates;
+  @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER)
+  private List<Template> templates;
+
+  @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER)
+  private List<User> users;
 
   @Override
   public boolean equals(Object o) {
