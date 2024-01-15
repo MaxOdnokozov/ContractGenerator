@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 @Entity
@@ -35,6 +36,7 @@ public class PlaceholderValue {
 
   private Integer sequenceNumber;
 
+  @ToString.Exclude
   @ManyToOne private Placeholder placeHolder;
 
   @Override

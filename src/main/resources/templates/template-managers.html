@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{welcome}">template-managers</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div th:insert="~{fragments/navbar :: navbar}"></div>
+
+    <h1>Template Managers</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Organization</th>
+            <th>Templates Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="manager : ${templateManagers}">
+            <td th:text="${manager.id}"></td>
+            <td th:text="${manager.email}"></td>
+            <td th:text="${manager.organization}"></td>
+            <td th:text="${manager.templatesCount}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination" th:if="${not templateManagersPage.empty}">
+            <li class="page-item" th:classappend="${templateManagersPage.hasPrevious() ? '' : 'disabled'}">
+                <a class="page-link" th:href="@{/admin/template-managers(page=${templateManagersPage.number - 1}, size=${templateManagersPage.size})}" aria-label="Previous" th:if="${templateManagersPage.hasPrevious()}">
+                    <span aria-hidden="true">«</span>
+                </a>
+            </li>
+            <!-- Generate page links only if there are pages to display -->
+            <li th:each="i : ${#numbers.sequence(0, templateManagersPage.totalPages - 1)}" class="page-item" th:classappend="${i == templateManagersPage.number ? 'active' : ''}">
+                <a class="page-link" th:href="@{/admin/template-managers(page=${i}, size=${templateManagersPage.size})}" th:text="${i + 1}">Page number</a>
+            </li>
+            <li class="page-item" th:classappend="${templateManagersPage.hasNext() ? '' : 'disabled'}">
+                <a class="page-link" th:href="@{/admin/template-managers(page=${templateManagersPage.number + 1}, size=${templateManagersPage.size})}" aria-label="Next" th:if="${templateManagersPage.hasNext()}">
+                    <span aria-hidden="true">»</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+
+<script>
+    function logout(event) {
+        event.preventDefault();
+        document.getElementById('logoutForm').submit();
+    }
+
+</script>
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<!-- Popper.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<!-- Bootstrap JS CDN -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

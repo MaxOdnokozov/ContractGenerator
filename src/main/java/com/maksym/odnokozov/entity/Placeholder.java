@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 @Entity
@@ -42,12 +43,14 @@ public class Placeholder {
   @Size(min = 1, max = 128)
   private String description;
 
+  @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "template_id")
   private Template template;
 
   @Builder.Default private PlaceholderType type = PlaceholderType.TEXT;
 
+  @ToString.Exclude
   @OneToMany private List<PlaceholderValue> predefinedValues;
 
   @Override

@@ -4,6 +4,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,6 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 @Entity
@@ -46,11 +48,16 @@ public class Template {
 
   private Language language;
 
-  @OneToMany(mappedBy = "template")
+  @ToString.Exclude
+  @OneToMany(mappedBy = "template", fetch = FetchType.LAZY)
   private List<Placeholder> placeholders;
 
-  @ManyToOne private User owner;
+  @ToString.Exclude
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "owner_id")
+  private User owner;
 
+  @ToString.Exclude
   @ManyToOne
   @JoinColumn(name = "organization_id")
   private Organization organization;

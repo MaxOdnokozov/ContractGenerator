@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 @Entity
@@ -41,10 +42,12 @@ public class Organization {
   @Size(min = 1, max = 256)
   private String description;
 
-  @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER)
+  @ToString.Exclude
+  @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
   private List<Template> templates;
 
-  @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER)
+  @ToString.Exclude
+  @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
   private List<User> users;
 
   @Override
