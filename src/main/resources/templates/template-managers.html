@@ -14,7 +14,14 @@
 
     <div th:insert="~{fragments/navbar :: navbar}"></div>
 
-    <h1>Template Managers</h1>
+    <div class="row mb-3">
+        <div class="col-lg-6">
+            <h1>Template Managers</h1>
+        </div>
+        <div class="col-lg-6 d-flex justify-content-lg-end align-items-center">
+            <a href="#" th:href="@{/admin/template-managers/create}" class="btn btn-primary">Add Template Manager</a>
+        </div>
+    </div>
     <table class="table">
         <thead>
         <tr>
@@ -25,7 +32,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="manager : ${templateManagers}">
+        <tr th:each="manager : ${templateManagersPage}">
             <td th:text="${manager.id}"></td>
             <td th:text="${manager.email}"></td>
             <td th:text="${manager.organization}"></td>

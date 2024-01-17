@@ -33,18 +33,12 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(
             (auth) ->
-                auth.requestMatchers("/", "/welcome", "/perform_logout")
-                    .permitAll()
-                    .requestMatchers("/css/**", "/js/**", "/img/**")
-                    .permitAll()
-                    .requestMatchers("/login")
-                    .anonymous()
-                    .anyRequest()
-                    .authenticated())
-        .formLogin((form) ->
-                form.loginPage("/login")
-                        .successHandler(successHandler())
-                        .permitAll())
+                auth.requestMatchers("/", "/welcome", "/perform_logout").permitAll()
+                    .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
+                    .requestMatchers("/login").anonymous()
+                    .requestMatchers("/admin/organizations").hasRole("ADMIN")
+                    .anyRequest().authenticated())
+        .formLogin((form) -> form.loginPage("/login").successHandler(successHandler()).permitAll())
         .logout(
             logout ->
                 logout
