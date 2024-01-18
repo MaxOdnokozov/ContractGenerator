@@ -4,6 +4,8 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -46,6 +48,7 @@ public class Template {
 
   @Builder.Default private boolean isActive = false;
 
+  @Enumerated(EnumType.STRING)
   private Language language;
 
   @ToString.Exclude

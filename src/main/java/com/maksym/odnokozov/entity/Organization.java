@@ -3,6 +3,7 @@ package com.maksym.odnokozov.entity;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -35,6 +36,7 @@ public class Organization {
   @SequenceGenerator(name = "organization_sequence", allocationSize = 1)
   private Long id;
 
+  @Column(unique = true)
   @NotNull
   @Size(min = 3, max = 256)
   private String name;

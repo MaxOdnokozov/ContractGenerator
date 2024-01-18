@@ -66,7 +66,7 @@ public class SecurityConfig {
           throws IOException, ServletException {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_TEMPLATE_MANAGER"))) {
-          setDefaultTargetUrl("/template-manager/organizations");
+          setDefaultTargetUrl("/template-manager/templates");
         } else if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
           setDefaultTargetUrl("/admin/template-managers");
         } else {

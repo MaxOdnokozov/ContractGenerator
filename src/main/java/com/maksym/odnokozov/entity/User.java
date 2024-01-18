@@ -3,6 +3,7 @@ package com.maksym.odnokozov.entity;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -38,6 +39,7 @@ public class User {
   @SequenceGenerator(name = "app_user_sequence", allocationSize = 1)
   private Long id;
 
+  @Column(unique = true)
   @NotNull
   @Size(min = 1, max = 256)
   private String email;

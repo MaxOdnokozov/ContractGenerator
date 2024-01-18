@@ -11,14 +11,14 @@ CREATE SEQUENCE placeholder_value_sequence START WITH 1 INCREMENT BY 1;
 -- Table for organization
 CREATE TABLE organization (
     id BIGINT PRIMARY KEY DEFAULT nextval('organization_sequence'),
-    name VARCHAR(256) NOT NULL,
+    name VARCHAR(256) NOT NULL UNIQUE,
     description VARCHAR(256)
 );
 
 -- Table for app_user with a foreign key to organization
 CREATE TABLE app_user (
     id BIGINT PRIMARY KEY DEFAULT nextval('app_user_sequence'),
-    email VARCHAR(256) NOT NULL,
+    email VARCHAR(256) NOT NULL UNIQUE,
     password VARCHAR(128) NOT NULL,
     role VARCHAR(32),
     organization_id BIGINT,

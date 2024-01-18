@@ -1,10 +1,13 @@
 package com.maksym.odnokozov.controller;
 
+import com.maksym.odnokozov.dto.template.TemplateViewDto;
 import com.maksym.odnokozov.entity.Template;
 import com.maksym.odnokozov.service.TemplateService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,9 +37,16 @@ public class TemplateController {
             Template savedTemplate = templateService.saveTemplate(file, principal);
             attributes.addFlashAttribute("message", "Template uploaded successfully: " + savedTemplate.getName());
         } catch (IOException e) {
-            e.printStackTrace(); // Log the exception, for real applications, use a logger
+            e.printStackTrace();
             attributes.addFlashAttribute("message", "Failed to upload template due to an error: " + e.getMessage());
         }
         return "redirect:/welcome";
+    }
+
+    @GetMapping("/template/edit/{id}")
+    public String editTemplateForm(@PathVariable Long id, Model model) {
+        TemplateViewDto template = templateService.getTemplateById(id);
+        model.addAttribute("template", template);
+        return "edit-template"; // Name of the Thymeleaf template for the edit form
     }
 }
