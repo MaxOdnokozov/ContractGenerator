@@ -3,6 +3,7 @@ package com.maksym.odnokozov.entity;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -51,7 +52,8 @@ public class Placeholder {
   @Builder.Default private PlaceholderType type = PlaceholderType.TEXT;
 
   @ToString.Exclude
-  @OneToMany private List<PlaceholderValue> predefinedValues;
+  @OneToMany(mappedBy = "placeholder", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<PlaceholderValue> predefinedValues;
 
   @Override
   public boolean equals(Object o) {

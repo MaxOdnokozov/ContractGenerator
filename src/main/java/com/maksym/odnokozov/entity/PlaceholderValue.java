@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -37,7 +38,9 @@ public class PlaceholderValue {
   private Integer sequenceNumber;
 
   @ToString.Exclude
-  @ManyToOne private Placeholder placeHolder;
+  @ManyToOne
+  @JoinColumn(name = "placeholder_id")
+  private Placeholder placeholder;
 
   @Override
   public boolean equals(Object o) {

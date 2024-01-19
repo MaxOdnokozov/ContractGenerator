@@ -16,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/template")
@@ -36,6 +38,7 @@ public class TemplateController {
         try {
             Template savedTemplate = templateService.saveTemplate(file, principal);
             attributes.addFlashAttribute("message", "Template uploaded successfully: " + savedTemplate.getName());
+            return "redirect:/template/edit/" + savedTemplate.getId();
         } catch (IOException e) {
             e.printStackTrace();
             attributes.addFlashAttribute("message", "Failed to upload template due to an error: " + e.getMessage());
@@ -43,10 +46,22 @@ public class TemplateController {
         return "redirect:/welcome";
     }
 
-    @GetMapping("/template/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String editTemplateForm(@PathVariable Long id, Model model) {
         TemplateViewDto template = templateService.getTemplateById(id);
         model.addAttribute("template", template);
-        return "edit-template"; // Name of the Thymeleaf template for the edit form
+        return "template-edit";
+    }
+
+    @PostMapping("/save")
+    public String saveTemplate(@RequestParam Long templateId,
+                               @RequestParam List<String> placeholderTypes,
+                               @RequestParam List<String> placeholderDescriptions,
+                               @RequestParam Map<Integer, List<String>> predefinedValues,
+                               RedirectAttributes attributes) {
+        // Logic to update placeholders with the new types, descriptions, and predefined values
+
+        // Redirect to a confirmation page or back to the list of templates
+        return "redirect:/template/success";
     }
 }

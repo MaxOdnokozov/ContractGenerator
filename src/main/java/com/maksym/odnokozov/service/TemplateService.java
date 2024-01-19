@@ -23,6 +23,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -145,7 +146,7 @@ public class TemplateService {
     return TemplateViewDto.builder()
         .id(template.getId())
         .name(template.getName())
-        .organizationName(template.getOrganization().getName())
+        .organizationName(template.getOwner().getOrganization().getName())
         .language(template.getLanguage().name())
         .isActive(template.isActive())
         .placeholders(
@@ -174,5 +175,40 @@ public class TemplateService {
         .sequenceNumber(value.getSequenceNumber())
         .id(value.getId())
         .build();
+  }
+
+  public void updateTemplatePlaceholders(Long templateId,
+                                         List<String> placeholderTypes,
+                                         List<String> placeholderDescriptions,
+                                         Map<Integer, List<String>> predefinedValues) {
+    // Fetch the template by ID
+    Template template = templateRepository.findById(templateId)
+            .orElseThrow(() -> new RuntimeException("Template not found"));
+
+    // Update placeholders with new types, descriptions, and predefined values
+    for (int i = 0; i < template.getPlaceholders().size(); i++) {
+      Placeholder placeholder = template.getPlaceholders().get(i);
+      placeholder.setType(PlaceholderType.valueOf(placeholderTypes.get(i)));
+      placeholder.setDescription(placeholderDescriptions.get(i));
+
+      // Handle predefined values
+      List<String> valuesForPlaceholder = predefinedValues.get(i);
+      if (valuesForPlaceholder != null) {
+        // Clear existing predefined values
+        placeholder.getPredefinedValues().clear();
+        // Add new predefined values
+        for (String value : valuesForPlaceholder) {
+          if (!value.trim().isEmpty()) {
+            PlaceholderValue newValue = new PlaceholderValue();
+            newValue.setValue(value);
+            newValue.setPlaceholder(placeholder);
+            placeholder.getPredefinedValues().add(newValue);
+          }
+        }
+      }
+    }
+
+    // Save the updated template
+    templateRepository.save(template);
   }
 }
