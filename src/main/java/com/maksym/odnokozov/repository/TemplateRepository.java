@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TemplateRepository extends JpaRepository<Template, Long> {
 
-    Page<Template> findAllByOwnerId(Pageable pageable, Long ownerId);
+  Page<Template> findAllByOwnerId(Pageable pageable, Long ownerId);
 }

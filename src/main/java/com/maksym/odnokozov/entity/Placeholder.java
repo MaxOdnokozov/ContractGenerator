@@ -5,6 +5,7 @@ import static java.util.Objects.nonNull;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -52,7 +53,11 @@ public class Placeholder {
   @Builder.Default private PlaceholderType type = PlaceholderType.TEXT;
 
   @ToString.Exclude
-  @OneToMany(mappedBy = "placeholder", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(
+      mappedBy = "placeholder",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.EAGER)
   private List<PlaceholderValue> predefinedValues;
 
   @Override

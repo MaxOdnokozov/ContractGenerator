@@ -22,6 +22,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -136,10 +138,13 @@ public class TemplateService {
   }
 
   public TemplateViewDto getTemplateById(Long id) {
-    return templateRepository
+    var templateView = templateRepository
         .findById(id)
         .map(this::mapToTemplateViewDto)
         .orElseThrow(() -> new RuntimeException("Cannot find template by id=" + id));
+
+    log.info("######## Template view: {}", templateView);
+    return templateView;
   }
 
   private TemplateViewDto mapToTemplateViewDto(Template template) {
@@ -170,6 +175,7 @@ public class TemplateService {
   }
 
   private PlaceholderValueDto mapToPlaceholderValueDto(PlaceholderValue value) {
+    log.info("placeholderValue: {}", value);
     return PlaceholderValueDto.builder()
         .value(value.getValue())
         .sequenceNumber(value.getSequenceNumber())
@@ -177,13 +183,50 @@ public class TemplateService {
         .build();
   }
 
-  public void updateTemplatePlaceholders(Long templateId,
-                                         List<String> placeholderTypes,
-                                         List<String> placeholderDescriptions,
-                                         Map<Integer, List<String>> predefinedValues) {
+  @Transactional
+  public void updateTemplatePlaceholders(
+      Long templateId,
+      List<String> placeholderTypes,
+      List<String> placeholderDescriptions,
+      Map<String, String> predefinedValues) {
+    log.info("predefined Values: {}", predefinedValues);
+
     // Fetch the template by ID
-    Template template = templateRepository.findById(templateId)
+    Template template =
+        templateRepository
+            .findById(templateId)
             .orElseThrow(() -> new RuntimeException("Template not found"));
+
+    Map<Integer, List<PlaceholderValue>> placeholderValuesMap = new HashMap<>();
+    for (Map.Entry<String, String> entry : predefinedValues.entrySet()) {
+      var key = entry.getKey();
+      log.info("key: {}", key);
+      String value = entry.getValue();
+      log.info("value: {}", value);
+
+      // Check if the key matches the pattern for predefined values
+      if (key.startsWith("predefinedValues[")) {
+        // Extract placeholder index and predefined value index from the key
+        String[] parts = key.split("\\[|\\]|\\.");
+        log.info("Parts: {}", Arrays.asList(parts));
+        int placeholderIndex = Integer.parseInt(parts[1]);
+        int valueIndex = Integer.parseInt(parts[3]);
+
+        // Create a new PlaceholderValueDto with the value
+        PlaceholderValue placeholderValue =
+            PlaceholderValue.builder()
+                    .value(value)
+                    .sequenceNumber(valueIndex)
+                    .build();
+        placeholderValue.setValue(value);
+        log.info("placeholderValueDto: {}", placeholderValue);
+
+        // Add the PlaceholderValueDto to the map
+        placeholderValuesMap
+            .computeIfAbsent(placeholderIndex, k -> new ArrayList<>())
+            .add(placeholderValue);
+      }
+    }
 
     // Update placeholders with new types, descriptions, and predefined values
     for (int i = 0; i < template.getPlaceholders().size(); i++) {
@@ -192,17 +235,17 @@ public class TemplateService {
       placeholder.setDescription(placeholderDescriptions.get(i));
 
       // Handle predefined values
-      List<String> valuesForPlaceholder = predefinedValues.get(i);
+      List<PlaceholderValue> valuesForPlaceholder = placeholderValuesMap.get(i);
+      log.info("values for Placeholder: {}", valuesForPlaceholder);
+
       if (valuesForPlaceholder != null) {
         // Clear existing predefined values
         placeholder.getPredefinedValues().clear();
         // Add new predefined values
-        for (String value : valuesForPlaceholder) {
-          if (!value.trim().isEmpty()) {
-            PlaceholderValue newValue = new PlaceholderValue();
-            newValue.setValue(value);
-            newValue.setPlaceholder(placeholder);
-            placeholder.getPredefinedValues().add(newValue);
+        for (PlaceholderValue value : valuesForPlaceholder) {
+          if (!value.getValue().trim().isEmpty()) {
+            value.setPlaceholder(placeholder);
+            placeholder.getPredefinedValues().add(value);
           }
         }
       }

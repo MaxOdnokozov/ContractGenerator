@@ -4,6 +4,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,8 +39,8 @@ public class PlaceholderValue {
   private Integer sequenceNumber;
 
   @ToString.Exclude
-  @ManyToOne
-  @JoinColumn(name = "placeholder_id")
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "placeholder_id", referencedColumnName = "id")
   private Placeholder placeholder;
 
   @Override
